@@ -1,0 +1,6 @@
+selenium==3.141.0
+pytest
+pytest-xdist
+pytest-randomly
+sauceclient
+webdriver_manager
