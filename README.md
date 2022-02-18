@@ -16,4 +16,4 @@ python -m pytest -n auto --browser=chrome --host=saucelabs
 To run the tests on saucelabs tunnel:
 python -m pytest -n auto --browser=chrome --host=saucelabs-tunnel
 
-Note : Using the option -n auto launches tests in parallel mode and you will see multiple browser sessions launching at the same time
+Note : Using the option '-n auto' launches tests in parallel mode and you will see multiple browser sessions launching at the same time
