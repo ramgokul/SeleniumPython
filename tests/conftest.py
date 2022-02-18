@@ -26,7 +26,7 @@ def driver(request, cmdopt):
                 "name": request.node.name,
             }
         elif host == "saucelabs-tunnel":
-            tunnel_name = os.environ.get("SAUCE_TUNNEL")
+            tunnel_name = config.tunnelidentifier
             sauce_options = {
                 "name": request.node.name,
                 "tunnel_identifier": tunnel_name
@@ -75,6 +75,8 @@ def pytest_addoption(parser):
     parser.addoption("--host", action="store", default="saucelabs-tunnel", help="where to run your tests : localhost or saucelabs")
     parser.addoption("--browserversion", action="store", default="latest", help="browser version you want to test with")
     parser.addoption("--platform", action="store", default="Windows 10", help="the operating system to run your tests on (saucelabs only)")
+    parser.addoption("--tunnelidentifier", action="store", default="ramnath-proxy-tunnel",
+                     help="tunnel identifier (saucelabs-tunnel only)")
 
 
 @pytest.fixture(scope="session")
@@ -84,3 +86,4 @@ def cmdopt(request):
     config.host = request.config.getoption("--host")
     config.browser_version = request.config.getoption("--browserversion")
     config.platform = request.config.getoption("--platform")
+    config.tunnelidentifier = request.config.getoption("--tunnelidentifier")
