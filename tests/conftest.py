@@ -36,6 +36,7 @@ def driver(request, cmdopt):
             "browserName": config.browser_name,
             "browserVersion": config.browser_version,
             "platformName": config.platform,
+            "acceptInsecureCerts": True,
             "sauce:options": sauce_options
         }
         _credentials = os.environ.get("SAUCE_USERNAME") + ":" + os.environ.get("SAUCE_ACCESS_KEY")
@@ -50,12 +51,14 @@ def driver(request, cmdopt):
                      "profile.password_manager_enabled": False}
             chrome_options.add_experimental_option("prefs", prefs)
             chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+            chrome_options.add_argument("ignore-certificate-errors")
             driver_ = webdriver.Chrome(executable_path=ChromeDriverManager().install(), options=chrome_options)
             driver_.file_detector = LocalFileDetector()
 
         elif browser == "firefox":
 
             firefox_options = FirefoxOptions()
+            firefox_options.accept_insecure_certs = True
             driver_ = webdriver.Firefox(executable_path=GeckoDriverManager().install(), options=firefox_options)
 
     driver_.maximize_window()
