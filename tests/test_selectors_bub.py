@@ -1,16 +1,15 @@
 import time
 
 from selenium.webdriver import ActionChains
-from selenium.webdriver.remote.webelement import WebElement
 
 
 def test_single_shadow_dom(driver):
     driver.get("https://selectorshub.com/xpath-practice-page/")
     time.sleep(3)
-    shadowDomHostElement = driver.find_element_by_css_selector("#userName")
+    shadow_element_1 = driver.find_element_by_css_selector("#userName")
     act = ActionChains(driver)
-    act.move_to_element(shadowDomHostElement).perform()
-    driver.execute_script("arguments[0].shadowRoot.getElementById('kils').value='ramnath'", shadowDomHostElement)
+    act.move_to_element(shadow_element_1).perform()
+    driver.execute_script("arguments[0].shadowRoot.getElementById('kils').value='ramnath'", shadow_element_1)
     time.sleep(5)
     driver.find_element_by_xpath("//a[.='Training']")
 
