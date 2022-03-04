@@ -1,4 +1,6 @@
 import pytest
+from assertpy import assert_that
+
 from pages.login_page import LoginPage
 
 
@@ -10,11 +12,13 @@ def login(driver):
 @pytest.mark.sanity
 def test_valid_credentials(login):
     login.with_("tomsmith", "SuperSecretPassword!")
-    assert login.verify_login_success()
+    is_login_success = login.verify_login_success()
+    assert_that(is_login_success).is_true()
 
 
 @pytest.mark.regression
 def test_invalid_credentials(login):
     login.with_("tomsmith", "test")
-    assert login.verify_login_failure()
+    is_login_failure_msg_displayed =  login.verify_login_failure()
+    assert_that(is_login_failure_msg_displayed).is_true()
 
