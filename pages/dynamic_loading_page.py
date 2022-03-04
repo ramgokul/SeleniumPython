@@ -17,4 +17,4 @@ class DynamicLoadingPage(BasePage):
 
     def verify_finish_text_present(self):
         self._is_not_displayed(self._loading_icon, timeout=20)
-        self._is_displayed(self._finish, timeout=20)
+        return self._is_displayed(self._finish, timeout=20)
