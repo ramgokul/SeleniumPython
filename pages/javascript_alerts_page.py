@@ -18,22 +18,25 @@ class JavaScriptAlertsPage(BasePage):
         self._click(self.js_alert)
         assert self._get_alert_text() == "I am a JS Alert"
         self._alert_accept()
+        self._switch_to_default_content()
         self._is_displayed(self.js_result)
-        return self._text(self.js_result)
+        return self._get_element_text(self.js_result)
 
     def click_js_confirm_ok(self):
         self._click(self.js_confirm)
         assert self._get_alert_text() == "I am a JS Confirm"
         self._alert_accept()
+        self._switch_to_default_content()
         self._is_displayed(self.js_result)
-        return self._text(self.js_result)
+        return self._get_element_text(self.js_result)
 
     def click_js_confirm_cancel(self):
         self._click(self.js_confirm)
         assert self._get_alert_text() == "I am a JS Confirm"
         self._alert_dismiss()
+        self._switch_to_default_content()
         self._is_displayed(self.js_result)
-        return self._text(self.js_result)
+        return self._get_element_text(self.js_result)
 
     def click_js_prompt_and_enter_text(self, text):
         self._click(self.js_prompt)
@@ -41,5 +44,6 @@ class JavaScriptAlertsPage(BasePage):
         al = self.driver.switch_to.alert
         al.send_keys(text)
         self._alert_accept()
+        self._switch_to_default_content()
         self._is_displayed(self.js_result)
-        assert self._text(self.js_result) == f"You entered: {text}"
+        assert self._get_element_text(self.js_result) == f"You entered: {text}"

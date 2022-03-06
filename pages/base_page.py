@@ -77,7 +77,6 @@ class BasePage:
     def _alert_accept(self, timeout=0):
         if self._alert_is_present(timeout):
             self.driver.switch_to.alert.accept()
-            self.driver.switch_to.default_content()
             return True
         else:
             return False
@@ -85,7 +84,6 @@ class BasePage:
     def _alert_dismiss(self, timeout=0):
         if self._alert_is_present(timeout):
             self.driver.switch_to.alert.dismiss()
-            self.driver.switch_to.default_content()
             return True
         else:
             return False
@@ -97,5 +95,8 @@ class BasePage:
         else:
             return False
 
-    def _text(self, locator):
+    def _get_element_text(self, locator):
         return self._find(locator).text.strip()
+
+    def _switch_to_default_content(self):
+        self.driver.switch_to.default_content()
