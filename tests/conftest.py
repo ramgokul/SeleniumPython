@@ -11,6 +11,10 @@ import os
 
 from tests import config
 
+rp_uuid = "157c24af-2d58-4b92-a887-8135cf35f043"
+rp_endpoint = "http://localhost:8080"
+rp_project = "reqres_api_tests"
+
 
 @pytest.fixture
 def driver(request, cmdopt):
@@ -81,6 +85,11 @@ def pytest_addoption(parser):
     parser.addoption("--tunnelidentifier", action="store", default="ramnath-proxy-tunnel",
                      help="tunnel identifier (saucelabs-tunnel only)")
 
+    parser.addini("rp_uuid", 'help', type="pathlist")
+    parser.addini("rp_endpoint", 'help', type="pathlist")
+    parser.addini("rp_project", 'help', type="pathlist")
+    parser.addini("rp_launch", 'help', type="pathlist")
+
 
 @pytest.fixture(scope="session")
 def cmdopt(request):
@@ -90,3 +99,18 @@ def cmdopt(request):
     config.browser_version = request.config.getoption("--browserversion")
     config.platform = request.config.getoption("--platform")
     config.tunnelidentifier = request.config.getoption("--tunnelidentifier")
+
+
+@pytest.hookimpl()
+def pytest_configure(config):
+    # Sets the launch name based on the marker selected.
+    suite = config.getoption("markexpr")
+    try:
+        config._inicache["rp_uuid"] = rp_uuid
+        config._inicache["rp_endpoint"] = rp_endpoint
+        config._inicache["rp_project"] = rp_project
+        config._inicache["rp_launch"] = "Automated test results"
+        config._inicache["rp_launch_description"] = f"Automated tests for {suite}"
+        config._inicache["rp_launch_attributes"] = suite
+    except Exception as e:
+        print(str(e))
