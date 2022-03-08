@@ -14,6 +14,7 @@ from tests import config
 rp_uuid = "157c24af-2d58-4b92-a887-8135cf35f043"
 rp_endpoint = "http://localhost:8080"
 rp_project = "reqres_api_tests"
+rp_launch = "Automated_Test_Results"
 
 
 @pytest.fixture
@@ -84,6 +85,8 @@ def pytest_addoption(parser):
     parser.addoption("--platform", action="store", default="Windows 10", help="the operating system to run your tests on (saucelabs only)")
     parser.addoption("--tunnelidentifier", action="store", default="ramnath-proxy-tunnel",
                      help="tunnel identifier (saucelabs-tunnel only)")
+    # parser.addoption("--rp_launch", action="store", default="Automated_Test_Results", help="RP launch name")
+    # parser.addoption("--rp_launch_attributes", action="store", default="", help="RP launch name")
 
     parser.addini("rp_uuid", 'help', type="pathlist")
     parser.addini("rp_endpoint", 'help', type="pathlist")
@@ -99,18 +102,20 @@ def cmdopt(request):
     config.browser_version = request.config.getoption("--browserversion")
     config.platform = request.config.getoption("--platform")
     config.tunnelidentifier = request.config.getoption("--tunnelidentifier")
+    # config.rp_launch = request.config.getoption("--rp_launch")
+    # config.rp_launch_attributes = request.config.getoption("--rp_launch_attributes")
 
 
 @pytest.hookimpl()
 def pytest_configure(config):
     # Sets the launch name based on the marker selected.
-    suite = config.getoption("markexpr")
+    # suite = config.getoption("markexpr")
     try:
         config._inicache["rp_uuid"] = rp_uuid
         config._inicache["rp_endpoint"] = rp_endpoint
         config._inicache["rp_project"] = rp_project
-        config._inicache["rp_launch"] = "Automated test results"
-        config._inicache["rp_launch_description"] = f"Automated tests for {suite}"
-        config._inicache["rp_launch_attributes"] = suite
+        config._inicache["rp_launch"] = rp_launch
+        config._inicache["rp_launch_description"] = f"Automated_Test_Results"
+        # config._inicache["rp_launch_attributes"] = config.getoption("--rp_launch_attributes")
     except Exception as e:
         print(str(e))
