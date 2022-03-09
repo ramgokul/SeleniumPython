@@ -2,7 +2,7 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
-from tests import config
+from tests import configuration
 
 
 class BasePage:
@@ -17,7 +17,7 @@ class BasePage:
         if url.startswith("http"):
             self.driver.get(url)
         else:
-            self.driver.get(config.base_url.strip("/") + url)
+            self.driver.get(configuration.base_url.strip("/") + url)
 
     def _is_displayed(self, locator, timeout=0):
 

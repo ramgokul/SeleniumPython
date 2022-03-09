@@ -9,7 +9,7 @@ from webdriver_manager.firefox import GeckoDriverManager
 
 import os
 
-from tests import config
+from tests import configuration, configuration
 
 rp_uuid = "157c24af-2d58-4b92-a887-8135cf35f043"
 rp_endpoint = "http://localhost:8080"
@@ -20,8 +20,8 @@ rp_launch = "Automated_Test_Results"
 @pytest.fixture
 def driver(request, cmdopt):
 
-    browser = config.browser_name.lower().strip()
-    host = config.host.lower().strip()
+    browser = configuration.browser_name.lower().strip()
+    host = configuration.host.lower().strip()
     driver_ = None
 
     if host == "saucelabs" or host == "saucelabs-tunnel":
@@ -31,16 +31,16 @@ def driver(request, cmdopt):
                 "name": request.node.name,
             }
         elif host == "saucelabs-tunnel":
-            tunnel_name = config.tunnelidentifier
+            tunnel_name = configuration.tunnelidentifier
             sauce_options = {
                 "name": request.node.name,
                 "tunnel_identifier": tunnel_name
             }
 
         caps = {
-            "browserName": config.browser_name,
-            "browserVersion": config.browser_version,
-            "platformName": config.platform,
+            "browserName": configuration.browser_name,
+            "browserVersion": configuration.browser_version,
+            "platformName": configuration.platform,
             "acceptInsecureCerts": True,
             "sauce:options": sauce_options
         }
@@ -85,7 +85,7 @@ def pytest_addoption(parser):
     parser.addoption("--platform", action="store", default="Windows 10", help="the operating system to run your tests on (saucelabs only)")
     parser.addoption("--tunnelidentifier", action="store", default="ramnath-proxy-tunnel",
                      help="tunnel identifier (saucelabs-tunnel only)")
-    # parser.addoption("--rp_launch", action="store", default="Automated_Test_Results", help="RP launch name")
+    parser.addoption("--rp_launch", action="store", default="Automated_Test_Results", help="RP launch name")
     # parser.addoption("--rp_launch_attributes", action="store", default="", help="RP launch name")
 
     parser.addini("rp_uuid", 'help', type="pathlist")
@@ -96,13 +96,13 @@ def pytest_addoption(parser):
 
 @pytest.fixture(scope="session")
 def cmdopt(request):
-    config.base_url = request.config.getoption("--baseurl")
-    config.browser_name = request.config.getoption("--browser")
-    config.host = request.config.getoption("--host")
-    config.browser_version = request.config.getoption("--browserversion")
-    config.platform = request.config.getoption("--platform")
-    config.tunnelidentifier = request.config.getoption("--tunnelidentifier")
-    # config.rp_launch = request.config.getoption("--rp_launch")
+    configuration.base_url = request.config.getoption("--baseurl")
+    configuration.browser_name = request.config.getoption("--browser")
+    configuration.host = request.config.getoption("--host")
+    configuration.browser_version = request.config.getoption("--browserversion")
+    configuration.platform = request.config.getoption("--platform")
+    configuration.tunnelidentifier = request.config.getoption("--tunnelidentifier")
+    configuration.rp_launch = request.config.getoption("--rp_launch")
     # config.rp_launch_attributes = request.config.getoption("--rp_launch_attributes")
 
 
@@ -114,7 +114,7 @@ def pytest_configure(config):
         config._inicache["rp_uuid"] = rp_uuid
         config._inicache["rp_endpoint"] = rp_endpoint
         config._inicache["rp_project"] = rp_project
-        config._inicache["rp_launch"] = rp_launch
+        config._inicache["rp_launch"] = configuration.rp_launch
         config._inicache["rp_launch_description"] = f"Automated_Test_Results"
         # config._inicache["rp_launch_attributes"] = config.getoption("--rp_launch_attributes")
     except Exception as e:
