@@ -9,14 +9,20 @@ from webdriver_manager.firefox import GeckoDriverManager
 
 import os
 
+from pages.dynamic_loading_page import DynamicLoadingPage
+from pages.javascript_alerts_page import JavaScriptAlertsPage
+from pages.login_page import LoginPage
 from tests import configuration, configuration
 
+# ******************* ReportPortal Variables **********************
 rp_uuid = "157c24af-2d58-4b92-a887-8135cf35f043"
 rp_endpoint = "http://localhost:8080"
 rp_project = "reqres_api_tests"
 rp_launch = "Automated_Test_Results"
+# ******************* ReportPortal Variables **********************
 
 
+# *********************************** Browser launch ****************************************************
 @pytest.fixture
 def driver(request, cmdopt):
 
@@ -75,14 +81,20 @@ def driver(request, cmdopt):
             sauce_result = "failed" if request.session.testsfailed == 1 else "passed"
             driver_.execute_script("sauce:job-result={}".format(sauce_result))
         driver_.quit()
+# *********************************** Browser launch ****************************************************
 
 
+# ******************** Retrieve and store global variables passed at runtime ***************************************
 def pytest_addoption(parser):
-    parser.addoption("--baseurl", action="store", default="https://the-internet.herokuapp.com", help="base URL for the AUT")
-    parser.addoption("--browser", action="store", default="firefox", help="the name of the browser you want to test with")
-    parser.addoption("--host", action="store", default="saucelabs-tunnel", help="where to run your tests : localhost or saucelabs")
+    parser.addoption("--baseurl", action="store", default="https://the-internet.herokuapp.com",
+                     help="base URL for the AUT")
+    parser.addoption("--browser", action="store", default="firefox",
+                     help="the name of the browser you want to test with")
+    parser.addoption("--host", action="store", default="saucelabs-tunnel",
+                     help="where to run your tests : localhost or saucelabs")
     parser.addoption("--browserversion", action="store", default="latest", help="browser version you want to test with")
-    parser.addoption("--platform", action="store", default="Windows 10", help="the operating system to run your tests on (saucelabs only)")
+    parser.addoption("--platform", action="store", default="Windows 10",
+                     help="the operating system to run your tests on (saucelabs only)")
     parser.addoption("--tunnelidentifier", action="store", default="ramnath-proxy-tunnel",
                      help="tunnel identifier (saucelabs-tunnel only)")
     parser.addoption("--rp_launch", action="store", default="Automated_Test_Results", help="RP launch name")
@@ -104,8 +116,10 @@ def cmdopt(request):
     configuration.tunnelidentifier = request.config.getoption("--tunnelidentifier")
     configuration.rp_launch = request.config.getoption("--rp_launch")
     # config.rp_launch_attributes = request.config.getoption("--rp_launch_attributes")
+# ******************** Retrieve and store global variables passed at runtime ***************************************
 
 
+# ************************* Init values for report portal ******************************
 @pytest.hookimpl()
 def pytest_configure(config):
     # Sets the launch name based on the marker selected.
@@ -119,3 +133,21 @@ def pytest_configure(config):
         # config._inicache["rp_launch_attributes"] = config.getoption("--rp_launch_attributes")
     except Exception as e:
         print(str(e))
+# ************************* Init values for report portal ******************************
+
+
+# ************************* Init class instances ******************************
+@pytest.fixture
+def login(driver):
+    return LoginPage(driver)
+
+
+@pytest.fixture
+def dynamic_loading(driver):
+    return DynamicLoadingPage(driver)
+
+
+@pytest.fixture
+def js_alerts(driver):
+    return JavaScriptAlertsPage(driver)
+# ************************* Init class instances ******************************
